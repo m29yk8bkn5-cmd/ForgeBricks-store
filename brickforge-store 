@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrickVault – Your Brick Store</title>
+
+<style>
+:root {
+  --primary: #f0a500;
+  --dark: #222;
+  --light: #fafafa;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--light);
+  color: var(--dark);
+}
+
+/* Header */
+header {
+  background: var(--dark);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  color: var(--primary);
+  font-size: 1.5rem;
+}
+
+button {
+  background: var(--primary);
+  border: none;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Main content */
+main {
+  padding: 15px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.product {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.product img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.product h3 {
+  margin: 10px 0 5px;
+  font-size: 1rem;
+}
+
+.price {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Cart */
+#cart {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100%;
+  background: white;
+  box-shadow: -3px 0 10px rgba(0,0,0,0.2);
+  padding: 15px;
+  transition: 0.3s;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+#cart.open {
+  right: 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: var(--dark);
+  color: white;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>BrickVault</h1>
+  <button onclick="toggleCart()">Cart (<span id="cartCount">0</span>)</button>
+</header>
+
+<main>
+  <h2>Our Brick Sets</h2>
+  <div class="products" id="productList"></div>
+</main>
+
+<!-- Cart Panel -->
+<div id="cart">
+  <h2>Your Cart</h2>
+  <div id="cartItems"></div>
+  <hr>
+  <p><strong>Total: $<span id="total">0</span></strong></p>
+  <button onclick="checkout()">Checkout</button>
+</div>
+
+<footer>
+  <p>BrickVault © 2026 – Independent Brick Store</p>
+</footer>
+
+<script>
+// Product Data
+const products = [
+  { id: 1, name: "City Builder Set", price: 29.99, img: "https://via.placeholder.com/300?text=City+Set" },
+  { id: 2, name: "Space Explorer Kit", price: 39.99, img: "https://via.placeholder.com/300?text=Space+Kit" },
+  { id: 3, name: "Battle Mech Bricks", price: 49.99, img: "https://via.placeholder.com/300?text=Mech+Set" },
+  { id: 4, name: "Classic Brick Box", price: 19.99, img: "https://via.placeholder.com/300?text=Classic+Bricks" }
+];
+
+let cart = [];
+
+// Render products
+const productList = document.getElementById("productList");
+products.forEach(p => {
+  productList.innerHTML += `
+    <div class="product">
+      <img src="${p.img}" alt="${p.name}">
+      <h3>${p.name}</h3>
+      <p class="price">$${p.price}</p>
+      <button onclick="addToCart(${p.id})">Add to Cart</button>
+    </div>
+  `;
+});
+
+// Cart Functions
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  updateCart();
+}
+
+function updateCart() {
+  document.getElementById("cartCount").innerText = cart.length;
+  const cartItems = document.getElementById("cartItems");
+  cartItems.innerHTML = "";
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price;
+    cartItems.innerHTML += `
+      <div class="cart-item">
+        <span>${item.name}</span>
+        <span>$${item.price}</span>
+      </div>
+    `;
+  });
+  document.getElementById("total").innerText = total.toFixed(2);
+}
+
+function toggleCart() {
+  document.getElementById("cart").classList.toggle("open");
+}
+
+function checkout() {
+  alert("Checkout is not connected yet.\nThis is a demo store.");
+}
+</script>
+
+</body>
+</html>
